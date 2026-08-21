@@ -355,6 +355,7 @@ footer{border-top:1px solid var(--linea);padding-block:3rem 2rem;margin-top:var(
   .menu.abierto{display:flex}
   .menu a{width:100%;padding:.95rem 0;border-bottom:1px solid var(--linea)}
   .nav .btn{display:none}
+  .carrito-btn{order:2;margin-left:auto}
   .franja{grid-template-columns:repeat(2,1fr)}
   .franja div:nth-child(3){border-left:0}
   .franja div:nth-child(-n+2){border-bottom:1px solid var(--linea)}
@@ -373,6 +374,159 @@ footer{border-top:1px solid var(--linea);padding-block:3rem 2rem;margin-top:var(
   html{scroll-behavior:auto}
   .rev{opacity:1;transform:none}
 }
+
+/* ================= CATÁLOGO / TIENDA ================= */
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden}
+
+.filtros{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.2rem}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.55rem 1rem;border-radius:100px;border:1px solid var(--linea);
+  background:transparent;color:var(--tenue);cursor:pointer;
+  transition:color .25s,border-color .25s,background .25s,transform .25s var(--ease);
+}
+.chip:hover{color:var(--texto);border-color:var(--linea-fuerte)}
+.chip[aria-pressed="true"]{background:var(--verde);border-color:var(--verde);color:#04140A;font-weight:700}
+
+.productos{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem}
+.producto{
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  background:linear-gradient(180deg,var(--superficie-2),var(--superficie));
+  border:1px solid var(--linea);border-radius:20px;
+  transition:transform .4s var(--ease),border-color .4s,box-shadow .4s,opacity .35s;
+}
+.producto:hover{transform:translateY(-6px);border-color:var(--linea-fuerte);box-shadow:0 26px 50px -34px rgba(47,224,116,.6)}
+.producto.oculto{display:none}
+
+.prod-img{
+  position:relative;aspect-ratio:4/3;display:grid;place-items:center;
+  border-bottom:1px solid var(--linea);color:var(--verde);
+  background:radial-gradient(60% 60% at 50% 45%,rgba(47,224,116,.13),transparent 70%);
+}
+.prod-img svg{width:72%;height:auto;max-height:78%;filter:drop-shadow(0 8px 24px rgba(47,224,116,.25));transition:transform .5s var(--ease)}
+.producto:hover .prod-img svg{transform:translateY(-4px) scale(1.03)}
+.badge{
+  position:absolute;top:.85rem;left:.85rem;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.3rem .6rem;border-radius:100px;background:rgba(47,224,116,.15);
+  border:1px solid var(--linea-fuerte);color:var(--verde);
+}
+.badge.pocas{background:rgba(56,224,196,.12);border-color:rgba(56,224,196,.4);color:var(--agua)}
+
+.prod-cuerpo{padding:1.3rem 1.3rem 1.4rem;display:flex;flex-direction:column;flex:1}
+.prod-cat{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue)}
+.prod-cuerpo h3{font-size:1.05rem;margin:.5rem 0 .4rem}
+.prod-cuerpo p{font-size:.85rem;line-height:1.5;flex:1}
+.prod-pie{display:flex;align-items:center;gap:.8rem;margin-top:1.2rem}
+.precio{display:flex;flex-direction:column;line-height:1.15}
+.precio b{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.precio span{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.14em;color:var(--tenue)}
+.agregar{
+  margin-left:auto;display:inline-flex;align-items:center;gap:.45rem;cursor:pointer;
+  padding:.65rem 1.05rem;border-radius:100px;font-family:inherit;font-size:.83rem;font-weight:700;
+  border:1px solid var(--linea-fuerte);background:rgba(47,224,116,.07);color:var(--texto);
+  transition:background .25s,color .25s,transform .25s var(--ease),border-color .25s;
+}
+.agregar svg{width:1rem;height:1rem}
+.agregar:hover{background:var(--verde);border-color:var(--verde);color:#04140A;transform:translateY(-2px)}
+.agregar.hecho{background:var(--verde);border-color:var(--verde);color:#04140A}
+
+.nota-tienda{
+  margin-top:2rem;padding:1rem 1.2rem;border:1px dashed var(--linea);border-radius:14px;
+  font-size:.83rem;color:var(--tenue);
+}
+
+/* ---- botón del carrito en la barra ---- */
+.carrito-btn{
+  position:relative;width:2.7rem;height:2.7rem;flex:none;display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--linea);border-radius:100px;background:transparent;color:var(--texto);
+  transition:border-color .25s,background .25s;
+}
+.carrito-btn:hover{border-color:var(--verde);background:rgba(47,224,116,.08)}
+.carrito-btn svg{width:1.15rem;height:1.15rem}
+.contador{
+  position:absolute;top:-5px;right:-5px;min-width:1.25rem;height:1.25rem;padding:0 .3rem;
+  display:grid;place-items:center;border-radius:100px;background:var(--verde);color:#04140A;
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;
+  transform:scale(0);transition:transform .3s var(--ease);
+}
+.contador.activo{transform:scale(1)}
+@keyframes latido{0%,100%{transform:scale(1)}45%{transform:scale(1.35)}}
+.contador.latido{animation:latido .45s var(--ease)}
+
+/* ---- panel del carrito ---- */
+.velo{
+  position:fixed;inset:0;z-index:80;background:rgba(2,7,5,.72);backdrop-filter:blur(4px);
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s;
+}
+.velo.abierto{opacity:1;visibility:visible}
+.carrito{
+  position:fixed;top:0;right:0;bottom:0;z-index:90;width:min(100%,404px);
+  display:flex;flex-direction:column;
+  background:linear-gradient(180deg,#071310,#040C08);border-left:1px solid var(--linea);
+  transform:translateX(102%);transition:transform .45s var(--ease);
+}
+.carrito.abierto{transform:none}
+.carrito-cab{display:flex;align-items:center;gap:1rem;padding:1.4rem 1.4rem 1.2rem;border-bottom:1px solid var(--linea)}
+.carrito-cab h3{font-size:1.1rem;text-transform:uppercase;letter-spacing:-.02em}
+.cerrar{
+  margin-left:auto;width:2.2rem;height:2.2rem;display:grid;place-items:center;cursor:pointer;
+  background:none;border:1px solid var(--linea);border-radius:100px;color:var(--tenue);
+  transition:color .25s,border-color .25s,transform .25s var(--ease);
+}
+.cerrar:hover{color:var(--texto);border-color:var(--linea-fuerte);transform:rotate(90deg)}
+.cerrar svg{width:1rem;height:1rem}
+.carrito-lista{flex:1;overflow-y:auto;padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:.9rem}
+.vacio{margin:auto;text-align:center;padding:2rem 1rem}
+.vacio svg{width:2.6rem;height:2.6rem;color:var(--linea-fuerte);margin:0 auto 1rem}
+.vacio b{display:block;font-size:1rem;margin-bottom:.4rem}
+.vacio p{font-size:.86rem}
+.item{display:flex;gap:.9rem;align-items:center;padding-bottom:.9rem;border-bottom:1px solid var(--linea)}
+.item:last-child{border-bottom:0;padding-bottom:0}
+.item-img{
+  width:3.4rem;height:3.4rem;flex:none;display:grid;place-items:center;border-radius:12px;
+  border:1px solid var(--linea);background:rgba(47,224,116,.06);color:var(--verde);
+}
+.item-img svg{width:60%;height:auto}
+.item-txt{flex:1;min-width:0}
+.item-txt b{display:block;font-size:.87rem;font-weight:600;line-height:1.3}
+.item-txt span{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--verde)}
+.cant{display:flex;align-items:center;gap:.1rem;border:1px solid var(--linea);border-radius:100px;padding:.15rem}
+.cant button{
+  width:1.6rem;height:1.6rem;display:grid;place-items:center;cursor:pointer;
+  background:none;border:0;border-radius:100px;color:var(--tenue);font-size:1rem;line-height:1;
+  transition:background .2s,color .2s;
+}
+.cant button:hover{background:rgba(47,224,116,.14);color:var(--verde)}
+.cant span{min-width:1.5rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.78rem}
+.carrito-pie{padding:1.3rem 1.4rem 1.5rem;border-top:1px solid var(--linea);background:rgba(4,12,8,.6)}
+.total{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1rem}
+.total span{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue)}
+.total b{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.carrito-pie .btn{width:100%}
+.aviso-pago{font-size:.74rem;color:var(--tenue);text-align:center;margin-top:.8rem}
+
+/* ---- aviso flotante ---- */
+.toast{
+  position:fixed;left:50%;bottom:1.6rem;z-index:95;
+  display:flex;align-items:center;gap:.6rem;padding:.85rem 1.3rem;border-radius:100px;
+  background:var(--verde);color:#04140A;font-size:.88rem;font-weight:700;
+  box-shadow:0 18px 40px -16px rgba(47,224,116,.8);
+  transform:translate(-50%,140%);transition:transform .45s var(--ease);
+}
+.toast.visible{transform:translate(-50%,0)}
+.toast svg{width:1.05rem;height:1.05rem}
+
+@media (max-width:980px){
+  .productos{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:560px){
+  .productos{grid-template-columns:1fr}
+  .filtros{overflow-x:auto;flex-wrap:nowrap;padding-bottom:.4rem;margin-inline:-1.25rem;padding-inline:1.25rem}
+  .chip{flex:none}
+  .carrito{width:100%}
+  .flotante{bottom:5.2rem}
+}
 </style>
 </head>
 <body>
@@ -386,11 +540,16 @@ footer{border-top:1px solid var(--linea);padding-block:3rem 2rem;margin-top:var(
     </a>
     <nav class="menu" id="menu">
       <a href="#servicios">Servicios</a>
+      <a href="#tienda">Catálogo</a>
       <a href="#datos">Procesamiento de datos</a>
       <a href="#proceso">Cómo trabajamos</a>
       <a href="#sectores">Para quién</a>
       <a href="#contacto">Contacto</a>
     </nav>
+    <button class="carrito-btn" id="abrir-carrito" type="button" aria-label="Ver tu pedido">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2.5l2.2 11.2a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 2-1.6L21 7H5.5"/></svg>
+      <span class="contador" id="contador">0</span>
+    </button>
     <a class="btn btn-solido" href="https://wa.me/5351234567" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.5 14.2c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.9-4.5-4-.2-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.2.3 0 .5.2.4.8 1.3 1.6 2 1 .8 1.8 1.1 2.1 1.2.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.7-.1 1.3Z"/></svg>
       Escríbenos
@@ -504,6 +663,195 @@ footer{border-top:1px solid var(--linea);padding-block:3rem 2rem;margin-top:var(
         <ul><li>Webs corporativas</li><li>Tiendas en línea</li><li>Apps móviles</li><li>Sistemas de gestión</li></ul>
       </article>
     </div>
+  </div>
+</section>
+
+<!-- ============ CATÁLOGO / TIENDA ============ -->
+<!-- Precios y existencias son de MUESTRA. Sustituir por el inventario real de Umbral. -->
+<svg class="svg-defs" aria-hidden="true">
+  <defs>
+    <linearGradient id="gPantalla" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(47,224,116,.34)"/>
+      <stop offset="100%" stop-color="rgba(47,224,116,.05)"/>
+    </linearGradient>
+    <linearGradient id="gCuerpo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(47,224,116,.14)"/>
+      <stop offset="100%" stop-color="rgba(47,224,116,.03)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- plantillas reutilizadas por el carrito -->
+  <symbol id="p-laptop" viewBox="0 0 200 150">
+    <rect x="46" y="24" width="108" height="72" rx="6" fill="url(#gCuerpo)" stroke="currentColor" stroke-width="3"/>
+    <rect x="55" y="33" width="90" height="54" rx="3" fill="url(#gPantalla)"/>
+    <path d="M26 118h148l-11-18H37z" fill="url(#gCuerpo)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M84 110h32" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <path d="M64 44h36M64 54h58M64 64h24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+
+  <symbol id="p-movil" viewBox="0 0 200 150">
+    <rect x="72" y="14" width="56" height="122" rx="12" fill="url(#gCuerpo)" stroke="currentColor" stroke-width="3"/>
+    <rect x="79" y="25" width="42" height="100" rx="5" fill="url(#gPantalla)"/>
+    <path d="M92 20h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="100" cy="131" r="2.6" fill="currentColor"/>
+    <rect x="86" y="36" width="28" height="20" rx="3" fill="currentColor" opacity=".35"/>
+    <path d="M86 66h28M86 76h20M86 86h24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+  </symbol>
+
+  <symbol id="p-impresora" viewBox="0 0 200 150">
+    <path d="M62 46V20h76v26" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="34" y="46" width="132" height="48" rx="8" fill="url(#gCuerpo)" stroke="currentColor" stroke-width="3"/>
+    <path d="M62 82h76v44H62z" fill="url(#gPantalla)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M74 96h52M74 108h38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+    <circle cx="150" cy="62" r="4" fill="currentColor"/>
+    <path d="M46 62h16" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+  </symbol>
+
+  <symbol id="p-toner" viewBox="0 0 200 150">
+    <path d="M40 62h104a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H40a8 8 0 0 1-8-8V70a8 8 0 0 1 8-8Z" fill="url(#gCuerpo)" stroke="currentColor" stroke-width="3"/>
+    <path d="M60 62V46a8 8 0 0 1 8-8h34a8 8 0 0 1 8 8v16" fill="url(#gPantalla)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M124 76h20v18h-20z" fill="currentColor" opacity=".4"/>
+    <path d="M46 78h48M46 90h30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+  </symbol>
+
+  <symbol id="p-pendrive" viewBox="0 0 200 150">
+    <rect x="36" y="56" width="96" height="38" rx="8" fill="url(#gCuerpo)" stroke="currentColor" stroke-width="3"/>
+    <rect x="132" y="64" width="34" height="22" rx="3" fill="url(#gPantalla)" stroke="currentColor" stroke-width="3"/>
+    <path d="M140 70h6M140 80h6M154 70h6M154 80h6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="52" y="68" width="42" height="14" rx="3" fill="currentColor" opacity=".3"/>
+    <circle cx="112" cy="75" r="4" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="p-router" viewBox="0 0 200 150">
+    <rect x="34" y="88" width="132" height="34" rx="10" fill="url(#gCuerpo)" stroke="currentColor" stroke-width="3"/>
+    <path d="M62 88 50 46M138 88l12-42" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="49" cy="42" r="5" fill="currentColor"/>
+    <circle cx="151" cy="42" r="5" fill="currentColor"/>
+    <circle cx="56" cy="105" r="4" fill="currentColor"/>
+    <circle cx="72" cy="105" r="4" fill="currentColor" opacity=".45"/>
+    <circle cx="88" cy="105" r="4" fill="currentColor" opacity=".45"/>
+    <path d="M92 66a24 24 0 0 1 34 0M102 76a12 12 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+  </symbol>
+</svg>
+
+<section id="tienda">
+  <div class="env">
+    <div class="cabecera-sec rev">
+      <div>
+        <p class="ceja">Catálogo</p>
+        <h2>Equipos disponibles</h2>
+      </div>
+      <p>Una muestra de lo que tenemos en existencia. Añade lo que necesites y envíanos el pedido por WhatsApp; te confirmamos disponibilidad y forma de pago.</p>
+    </div>
+
+    <div class="filtros rev" role="group" aria-label="Filtrar catálogo por categoría">
+      <button class="chip" data-filtro="todos" aria-pressed="true">Todos</button>
+      <button class="chip" data-filtro="laptops" aria-pressed="false">Laptops</button>
+      <button class="chip" data-filtro="moviles" aria-pressed="false">Móviles</button>
+      <button class="chip" data-filtro="impresion" aria-pressed="false">Impresión</button>
+      <button class="chip" data-filtro="redes" aria-pressed="false">Redes</button>
+      <button class="chip" data-filtro="accesorios" aria-pressed="false">Accesorios</button>
+    </div>
+
+    <div class="productos" id="productos">
+      <article class="producto rev" data-cat="laptops" data-id="lap14" data-nombre="Laptop 14&quot; Core i5" data-precio="285000" data-svg="p-laptop">
+        <div class="prod-img"><span class="badge">En existencia</span><svg viewBox="0 0 200 150" aria-hidden="true"><use href="#p-laptop"/></svg></div>
+        <div class="prod-cuerpo">
+          <span class="prod-cat">Laptops</span>
+          <h3>Laptop 14" Core i5</h3>
+          <p>8 GB RAM · 512 GB SSD · pantalla Full HD. Ideal para oficina, contabilidad y trabajo diario.</p>
+          <div class="prod-pie">
+            <span class="precio"><b>285 000</b><span>CUP</span></span>
+            <button class="agregar" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="producto rev" data-cat="moviles" data-id="mov128" data-nombre="Móvil 128 GB" data-precio="98000" data-svg="p-movil">
+        <div class="prod-img"><span class="badge">En existencia</span><svg viewBox="0 0 200 150" aria-hidden="true"><use href="#p-movil"/></svg></div>
+        <div class="prod-cuerpo">
+          <span class="prod-cat">Móviles</span>
+          <h3>Móvil 128 GB</h3>
+          <p>Pantalla 6.6" · 8 GB RAM · doble cámara · batería de 5000 mAh. Dual SIM.</p>
+          <div class="prod-pie">
+            <span class="precio"><b>98 000</b><span>CUP</span></span>
+            <button class="agregar" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="producto rev" data-cat="impresion" data-id="imp01" data-nombre="Impresora multifuncional" data-precio="145000" data-svg="p-impresora">
+        <div class="prod-img"><span class="badge pocas">Últimas unidades</span><svg viewBox="0 0 200 150" aria-hidden="true"><use href="#p-impresora"/></svg></div>
+        <div class="prod-cuerpo">
+          <span class="prod-cat">Impresión</span>
+          <h3>Impresora multifuncional</h3>
+          <p>Sistema de tinta continua · imprime, copia y escanea · conexión Wi-Fi. Instalación incluida en La Habana.</p>
+          <div class="prod-pie">
+            <span class="precio"><b>145 000</b><span>CUP</span></span>
+            <button class="agregar" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="producto rev" data-cat="impresion" data-id="ton01" data-nombre="Tóner compatible" data-precio="12500" data-svg="p-toner">
+        <div class="prod-img"><span class="badge">En existencia</span><svg viewBox="0 0 200 150" aria-hidden="true"><use href="#p-toner"/></svg></div>
+        <div class="prod-cuerpo">
+          <span class="prod-cat">Impresión</span>
+          <h3>Tóner compatible</h3>
+          <p>Rinde aproximadamente 2 000 páginas. Disponible para los modelos láser más usados; consúltanos el tuyo.</p>
+          <div class="prod-pie">
+            <span class="precio"><b>12 500</b><span>CUP</span></span>
+            <button class="agregar" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="producto rev" data-cat="redes" data-id="rou01" data-nombre="Router Wi-Fi doble banda" data-precio="34000" data-svg="p-router">
+        <div class="prod-img"><span class="badge">En existencia</span><svg viewBox="0 0 200 150" aria-hidden="true"><use href="#p-router"/></svg></div>
+        <div class="prod-cuerpo">
+          <span class="prod-cat">Redes</span>
+          <h3>Router Wi-Fi doble banda</h3>
+          <p>Cuatro antenas · 2.4 y 5 GHz · cobertura para oficinas medianas. Configuración incluida.</p>
+          <div class="prod-pie">
+            <span class="precio"><b>34 000</b><span>CUP</span></span>
+            <button class="agregar" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="producto rev" data-cat="accesorios" data-id="pen128" data-nombre="Pendrive 128 GB USB 3.2" data-precio="6800" data-svg="p-pendrive">
+        <div class="prod-img"><span class="badge">En existencia</span><svg viewBox="0 0 200 150" aria-hidden="true"><use href="#p-pendrive"/></svg></div>
+        <div class="prod-cuerpo">
+          <span class="prod-cat">Accesorios</span>
+          <h3>Pendrive 128 GB USB 3.2</h3>
+          <p>Carcasa metálica, lectura rápida. También disponible en 32 y 64 GB.</p>
+          <div class="prod-pie">
+            <span class="precio"><b>6 800</b><span>CUP</span></span>
+            <button class="agregar" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <p class="nota-tienda rev">¿No ves lo que buscas? Trabajamos por encargo: dinos el equipo y el uso que le vas a dar, y te cotizamos la mejor opción disponible.</p>
   </div>
 </section>
 
@@ -744,5 +1092,162 @@ footer{border-top:1px solid var(--linea);padding-block:3rem 2rem;margin-top:var(
   });
 })();
 </script>
+<div class="velo" id="velo" hidden></div>
+
+<aside class="carrito" id="carrito" role="dialog" aria-modal="true" aria-labelledby="carrito-titulo" aria-hidden="true">
+  <div class="carrito-cab">
+    <h3 id="carrito-titulo">Tu pedido</h3>
+    <button class="cerrar" id="cerrar-carrito" type="button" aria-label="Cerrar el pedido">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="carrito-lista" id="carrito-lista"></div>
+  <div class="carrito-pie">
+    <div class="total"><span>Total estimado</span><b id="total">0 CUP</b></div>
+    <button class="btn btn-solido" id="pedir" type="button">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.5 14.2c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.9-4.5-4-.2-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.2.3 0 .5.2.4.8 1.3 1.6 2 1 .8 1.8 1.1 2.1 1.2.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.7-.1 1.3Z"/></svg>
+      Enviar pedido por WhatsApp
+    </button>
+    <p class="aviso-pago">Confirmamos disponibilidad y forma de pago antes de cerrar la venta.</p>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toast-txt">Añadido al pedido</span>
+</div>
+
+<script>
+(function(){
+  var TEL = '5351234567';
+  var carro = [];
+  var lista = document.getElementById('carrito-lista');
+  var panel = document.getElementById('carrito');
+  var velo  = document.getElementById('velo');
+  var pill  = document.getElementById('contador');
+  var toast = document.getElementById('toast');
+  var toastTxt = document.getElementById('toast-txt');
+  var tempo;
+
+  var moneda = function(n){ return n.toLocaleString('es-ES') + ' CUP'; };
+
+  function abrir(){
+    velo.hidden = false;
+    requestAnimationFrame(function(){ velo.classList.add('abierto'); });
+    panel.classList.add('abierto');
+    panel.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('cerrar-carrito').focus();
+  }
+  function cerrar(){
+    velo.classList.remove('abierto');
+    panel.classList.remove('abierto');
+    panel.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    setTimeout(function(){ velo.hidden = true; }, 350);
+  }
+
+  function avisar(txt){
+    toastTxt.textContent = txt;
+    toast.classList.add('visible');
+    clearTimeout(tempo);
+    tempo = setTimeout(function(){ toast.classList.remove('visible'); }, 2200);
+  }
+
+  function pintar(){
+    var unidades = carro.reduce(function(s,i){ return s + i.cant; }, 0);
+    var total = carro.reduce(function(s,i){ return s + i.cant * i.precio; }, 0);
+
+    pill.textContent = unidades;
+    pill.classList.toggle('activo', unidades > 0);
+    if(unidades > 0){
+      pill.classList.remove('latido');
+      void pill.offsetWidth;
+      pill.classList.add('latido');
+    }
+    document.getElementById('total').textContent = moneda(total);
+
+    if(!carro.length){
+      lista.innerHTML = '<div class="vacio">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2.6l2.3 11.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 7H5.6"/></svg>' +
+        '<b>Aún no has añadido nada</b><p>Elige equipos del catálogo y los reunimos aquí para enviarnos el pedido completo.</p></div>';
+      return;
+    }
+
+    lista.innerHTML = carro.map(function(i){
+      return '<div class="item" data-id="' + i.id + '">' +
+        '<span class="item-img"><svg viewBox="0 0 200 150" aria-hidden="true"><use href="#' + i.svg + '"/></svg></span>' +
+        '<span class="item-txt"><b>' + i.nombre + '</b><span>' + moneda(i.precio * i.cant) + '</span></span>' +
+        '<span class="cant">' +
+          '<button type="button" data-accion="menos" aria-label="Quitar una unidad de ' + i.nombre + '">−</button>' +
+          '<span>' + i.cant + '</span>' +
+          '<button type="button" data-accion="mas" aria-label="Añadir una unidad de ' + i.nombre + '">+</button>' +
+        '</span></div>';
+    }).join('');
+  }
+
+  document.querySelectorAll('.producto .agregar').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var p = btn.closest('.producto');
+      var id = p.dataset.id;
+      var ya = carro.filter(function(i){ return i.id === id; })[0];
+      if(ya){ ya.cant++; }
+      else {
+        carro.push({
+          id: id,
+          nombre: p.dataset.nombre,
+          precio: parseInt(p.dataset.precio, 10),
+          svg: p.dataset.svg,
+          cant: 1
+        });
+      }
+      pintar();
+      avisar(p.dataset.nombre + ' añadido');
+      btn.classList.add('hecho');
+      setTimeout(function(){ btn.classList.remove('hecho'); }, 900);
+    });
+  });
+
+  lista.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-accion]');
+    if(!b) return;
+    var id = b.closest('.item').dataset.id;
+    var i = carro.filter(function(x){ return x.id === id; })[0];
+    if(!i) return;
+    if(b.dataset.accion === 'mas'){ i.cant++; }
+    else {
+      i.cant--;
+      if(i.cant <= 0) carro = carro.filter(function(x){ return x.id !== id; });
+    }
+    pintar();
+  });
+
+  document.querySelectorAll('.chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      var f = chip.dataset.filtro;
+      document.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c === chip); });
+      document.querySelectorAll('.producto').forEach(function(p){
+        p.classList.toggle('oculto', f !== 'todos' && p.dataset.cat !== f);
+      });
+    });
+  });
+
+  document.getElementById('abrir-carrito').addEventListener('click', abrir);
+  document.getElementById('cerrar-carrito').addEventListener('click', cerrar);
+  velo.addEventListener('click', cerrar);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && panel.classList.contains('abierto')) cerrar(); });
+
+  document.getElementById('pedir').addEventListener('click', function(){
+    if(!carro.length){ avisar('Añade algún equipo primero'); return; }
+    var lineas = carro.map(function(i){ return '• ' + i.cant + ' x ' + i.nombre + ' — ' + moneda(i.precio * i.cant); });
+    var total = carro.reduce(function(s,i){ return s + i.cant * i.precio; }, 0);
+    var txt = 'Hola Umbral, quiero pedir:\n' + lineas.join('\n') + '\n\nTotal estimado: ' + moneda(total);
+    window.open('https://wa.me/' + TEL + '?text=' + encodeURIComponent(txt), '_blank', 'noopener');
+  });
+
+  pintar();
+})();
+</script>
+
 </body>
 </html>
